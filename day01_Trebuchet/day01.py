@@ -1,14 +1,11 @@
 import re
-
-def read_input():
-    with open("01-input.txt") as input_file:
-        return input_file.readlines()
-
+import sys; sys.path.insert(0, "../utils")
+import utils
 
 # iterate over the items and calculate the sum for part 1
 def part_one():
     result = 0
-    for line in read_input():
+    for line in utils.read_input():
         digits_found = []
         for char in line:
             if char in '0123456789':
@@ -22,7 +19,7 @@ def part_one():
 # iterate over the items and calculate the sum for part 2
 def part_two():
     result = 0
-    for line in read_input():
+    for line in utils.read_input():
         # check if the line contains digit numbers
         char_index = 0
         digits_found = {}

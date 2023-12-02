@@ -1,8 +1,7 @@
-valid_cubes = {'green': 13, 'red': 12, 'blue': 14}
+import sys; sys.path.insert(0, "../utils")
+import utils
 
-def read_input():
-    with open("02-input.txt") as input_file:
-        return input_file.readlines()
+valid_cubes = {'green': 13, 'red': 12, 'blue': 14}
 
 def draw_is_impossible(games):
     for key in valid_cubes:
@@ -14,7 +13,7 @@ def draw_is_impossible(games):
 # part 1: check which games are valid
 def part_one():
     result = 0
-    for line in read_input():
+    for line in utils.read_input():
         split_by_semicolon = line.split(":")
         draws = split_by_semicolon[1].strip().split(";")
         games = {}
@@ -39,7 +38,7 @@ def part_one():
 # part 2: check the minimum number of cubes required per game and calculate the power
 def part_two():
     result = 0
-    for line in read_input():
+    for line in utils.read_input():
         split_by_semicolon = line.split(":")
         draws = split_by_semicolon[1].strip().split(";")
         games = {}
