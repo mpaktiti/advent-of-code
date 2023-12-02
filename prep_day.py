@@ -28,7 +28,8 @@ filepath = os.path.join(path, day + '-code.py')
 with open(filepath, 'w') as fp:
     pass
 filepath = os.path.join(path, day + '-input.txt')
-with open(filepath, 'w') as fp: 
+with open(filepath, 'w') as fp:
+    # TODO retrieve daily input and save it to file
     pass
 
 print("Directory and files created:")
