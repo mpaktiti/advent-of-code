@@ -24,10 +24,10 @@ path = "./day" + day
 os.mkdir(path) 
 
 # Creates files
-filepath = os.path.join(path, day + '-code.py')
+filepath = os.path.join(path, 'day' + day + '.py')
 with open(filepath, 'w') as fp:
     pass
-filepath = os.path.join(path, day + '-input.txt')
+filepath = os.path.join(path, 'input.txt')
 with open(filepath, 'w') as fp:
     # TODO retrieve daily input and save it to file
     pass
