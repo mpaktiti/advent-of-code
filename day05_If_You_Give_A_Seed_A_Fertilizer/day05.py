@@ -1,72 +1,83 @@
-import sys; sys.path.insert(0, '../utils')
-import utils
+import time
 
-def create_seed_entry(item):
-    seed = {}
-    seed['seed'] = item
-    seed['soil'] = '-'
-    seed['fertilizer'] = '-'
-    seed['water'] = '-'
-    seed['light'] = '-'
-    seed['temperature'] = '-'
-    seed['humidity'] = '-'
-    seed['location'] = '-'
-    return seed
+almanac = []
 
-def initialize_maps():
-    seeds = []
-    almanac_maps = {}
-    code = ''
-    for line in utils.read_input():
+def read_input():
+    with open("input.txt") as input_file:
+        return input_file.readlines()
+
+# initialize almanac
+def initialize_almanac():
+    temp_ranges = []
+    for line in read_input():
         if line.isspace():
+            if len(temp_ranges) > 0:
+                almanac.append(temp_ranges)
+                temp_ranges = []
             continue
-        if line[:6] == 'seeds:':
-            temp = line.split(':')
-            seed_numbers = temp[1].split()
-            for item in seed_numbers:
-                seeds.append(create_seed_entry(item))
         elif line[:1].isdigit():
-            temp = line.strip().split()
-            almanac_maps[code].append(temp)
-        else:
-            temp = line.split()
-            almanac_maps[temp[0]] = []
-            code = temp[0]
-    return seeds, almanac_maps
+            temp_ranges.append(line.split())
+        elif line[:6] == 'seeds:': # first line of file is different
+            temp = line.strip().split(':')
+            almanac.append(temp[1].split())
+    almanac.append(temp_ranges)
 
-def map_source_to_destination(map, seed_num):
-    for item in map:
-        dest_start = int(item[0])
-        src_start = int(item[1])
-        len = int(item[2])
-        src_end = src_start + len # not inclusive
-        if seed_num >= src_start and seed_num < src_end:
-            dest = dest_start + (seed_num - src_start)
-            res = dest
-            break
-        else:
-            res = seed_num
-    return res
+def min_location_for_seed(seed):
+    entity_counter = 0
+    locations = []
+    src = int(seed)
+    for entity in almanac: # loop through types (e.g. seed2soil, etc)
+        if entity_counter == 0:
+            entity_counter += 1
+            continue
+        # print('entity: ', entity)
+        for item in entity: # loop through each range in type (e.g. each sub-array of seed2soil)
+            # print('range in entity: ', item)
+            dest_start = int(item[0])
+            src_start = int(item[1])
+            range_length = int(item[2])
+            src_end = src_start + range_length
+            if src_start <= src < src_end :
+                # print('src is within range ', src_start, " - ", src_end)
+                src = dest_start + (src - src_start)
+                break
+        # print('match for entity = ', src)
+        if entity_counter == len(almanac) - 1:
+            # print('min location for seed ', seed, 'is ', src)
+            locations.append(src)
+        entity_counter += 1
+    return min(locations)
 
-# part 1: find the nearest location
-def part_one():
-    seeds, almanac_maps = initialize_maps()
-    # loop through seeds
-    # for each seed search all maps one by one
-    min_location = 0
+
+def part_one(seeds):
+    min_locations = []
     for seed in seeds:
-        seed_num = int(seed['seed'])
-        seed['soil'] = map_source_to_destination(almanac_maps['seed-to-soil'], seed_num)
-        seed['fertilizer'] = map_source_to_destination(almanac_maps['soil-to-fertilizer'], seed['soil'])
-        seed['water'] = map_source_to_destination(almanac_maps['fertilizer-to-water'], seed['fertilizer'])
-        seed['light'] = map_source_to_destination(almanac_maps['water-to-light'], seed['water'])
-        seed['temperature'] = map_source_to_destination(almanac_maps['light-to-temperature'], seed['light'])
-        seed['humidity'] = map_source_to_destination(almanac_maps['temperature-to-humidity'], seed['temperature'])
-        seed['location'] = map_source_to_destination(almanac_maps['humidity-to-location'], seed['humidity'])
-        if min_location == 0:
-            min_location = seed['location']
-        elif seed['location'] < min_location:
-            min_location = seed['location']
-    return min_location
+        # print('seed: ', seed)
+        min_locations.append(min_location_for_seed(seed))
+    return min(min_locations)
 
-print('Start planting at location: ', part_one())
+def part_two():
+    seeds_ranges = almanac[0]
+    i = 0
+    total_min = -1
+    while i < len(seeds_ranges):
+        range_start = int(seeds_ranges[i])
+        range_end = range_start + int(seeds_ranges[i+1]) # not inclusive
+        print('seeds range start = ', range_start)
+        print('seeds range end = ', range_end)
+        j = range_start
+        while j < range_end:
+            min_location = min_location_for_seed(j)
+            if total_min < 0 or min_location < total_min:
+                total_min = min_location
+            j += 1
+        i += 2
+    return total_min
+
+
+initialize_almanac()
+print('Single seeds location: ', part_one(almanac[0]))
+
+start_time = time.time()
+print('Single seeds location using ranges: ', part_two())
+print("Time to run: ", time.time() - start_time)
