@@ -4,7 +4,7 @@ import math
 # read cards from file and copy them to memory
 def read_cards():
     desert_map = {}
-    file = open("input.txt").readlines() # TODO replace read_input() with this
+    file = open("input.txt").readlines()
     instructions = list(file[0].strip()) # first line is instructions
     # 3+ lines are the desert map nodes
     desert_map = {
