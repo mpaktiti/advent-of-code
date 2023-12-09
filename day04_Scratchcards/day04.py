@@ -1,10 +1,6 @@
-import sys; sys.path.insert(0, "../utils")
-import utils
-
 def copy_file_to_array():
-    cards = []
-    for line in utils.read_input():
-        cards.append(line.strip())
+    file = open('input.txt').readlines()
+    cards = [line.strip() for line in file]
     return cards
 
 def num_of_matching_numbers(card):
@@ -12,10 +8,7 @@ def num_of_matching_numbers(card):
     left_part = split_info[0].split(":")
     winning_numbers = left_part[1].split()
     own_numbers = split_info[1].split()
-    winning_cards = 0
-    for number in own_numbers:
-        if number in winning_numbers:
-            winning_cards += 1
+    winning_cards = len([i for i in own_numbers if i in winning_numbers ])
     return winning_cards
 
 # part 1: add up the part numbers
@@ -49,14 +42,11 @@ def part_two():
     cards = copy_file_to_array()
 
     # SECOND APPROACH
-    pos = 1
     cards_copies = {}
-    for item in cards:
+    for pos, item in enumerate(cards, 1):
         cards_copies[pos] = 1
-        pos += 1
 
-    pos = 0
-    while pos < len(cards):
+    for pos in range(0, len(cards)):
         num_of_iterations = cards_copies[pos+1]
         counter = num_of_matching_numbers(cards[pos])
         if counter > 0:
@@ -65,8 +55,6 @@ def part_two():
             while start < end:
                 cards_copies[start+1] += num_of_iterations
                 start += 1
-            # i += 1
-        pos += 1
     return sum(cards_copies.values())
 
 

@@ -53,11 +53,8 @@ def get_number_going_left(char, engine_schematic, i, j):
 
 def build_array_from_file():
     engine_schematic = []
-    file = open("input.txt").readlines()
-    for line in file:
-        chars_array = []
-        for char in line.strip():
-            chars_array.append(char)
+    for line in open("input.txt").readlines():
+        chars_array = [char for char in line.strip()]
         engine_schematic.append(chars_array)
     return engine_schematic
 
@@ -67,8 +64,7 @@ def part_one():
     engine_schematic = build_array_from_file()
 
     # loop through array and sum the numbers that are adjacent to a symbol
-    i = 0
-    while i < len(engine_schematic):
+    for i in range(0, len(engine_schematic)):
         j = 0
         max_column_length = len(engine_schematic[i])
         while j < max_column_length:
@@ -154,10 +150,7 @@ def part_one():
                             j += skip_counter
                             continue
             j += 1
-        i += 1
-    result = 0
-    for item in part_numbers.values():
-        result += int(item)
+    result = sum([int(item) for item in part_numbers.values()])
     return result
 
 def is_part_number(whole_num, i, j):
@@ -170,15 +163,14 @@ def part_two():
     engine_schematic = build_array_from_file()
 
     # loop through array and find the symbols adjacent to two numbers
-    result, i = 0, 0
-    while i < len(engine_schematic):
-        j = 0
+    result = 0
+    for i in range(0, len(engine_schematic)):
         max_column_length = len(engine_schematic[i])
-        while j < max_column_length:
+        for j in range(0, max_column_length):
             char = engine_schematic[i][j]
             nums_found = []
             whole_num = ''
-            up_left_i, up_left_j, down_left_i, down_left_j = -1, -1, -1, -1
+            up_left_j, down_left_j = -1, -1
             if char == '*':
                 # Check for numbers up, down, left, and right, while staying within array bounds
                 # if j is at the first line item I cannot check left (out of bounds)
@@ -197,7 +189,7 @@ def part_two():
                     if engine_schematic[i][j + 1].isdigit():
                         # has number right
                         # get the whole num by reading the digits to the right
-                        whole_num, skip_counter = get_number_going_right(char, engine_schematic, i, j, max_column_length)
+                        whole_num, _ = get_number_going_right(char, engine_schematic, i, j, max_column_length)
                         if is_part_number(whole_num, i, j+1):
                             nums_found.append(int(whole_num))
                         whole_num = ''
@@ -209,7 +201,7 @@ def part_two():
                         # first go left
                         whole_num, counter_left = get_number_going_left(char, engine_schematic, i-1, j)
                         # then go right passing as input what you got from going left
-                        whole_num, skip_counter = get_number_going_right(whole_num, engine_schematic, i-1, j-1, max_column_length)
+                        whole_num, _ = get_number_going_right(whole_num, engine_schematic, i-1, j-1, max_column_length)
                         if is_part_number(whole_num, i-1, j-counter_left):
                             nums_found.append(int(whole_num))
                             up_left_j = j-counter_left
@@ -217,14 +209,14 @@ def part_two():
                     if engine_schematic[i - 1][j].isdigit():
                         # has number up
                         # I have already checked up left so go only right
-                        whole_num, skip_counter = get_number_going_right(char, engine_schematic, i-1, j-1, max_column_length)
+                        whole_num, _ = get_number_going_right(char, engine_schematic, i-1, j-1, max_column_length)
                         if is_part_number(whole_num, i-1, j):
                             nums_found.append(int(whole_num))
                         whole_num = ''
                     if j < max_column_length - 1:
                         if engine_schematic[i - 1][j + 1].isdigit():
                             # I have already checked up left so go only right
-                            whole_num, skip_counter = get_number_going_right(whole_num, engine_schematic, i-1, j, max_column_length)
+                            whole_num, _ = get_number_going_right(whole_num, engine_schematic, i-1, j, max_column_length)
                             if up_left_j != j+1:
                                 if is_part_number(whole_num, i-1, j+1):
                                     nums_found.append(int(whole_num))
@@ -258,8 +250,6 @@ def part_two():
                                     nums_found.append(int(whole_num))
             if len(nums_found) == 2:
                 result += nums_found[0] * nums_found[1]
-            j += 1
-        i += 1
     return result
 
 print("Sum of part numbers: ", part_one())

@@ -35,7 +35,6 @@ def part_one(file):
 # part 2: check the minimum number of cubes required per game and calculate the power
 def part_two(file):
     result = 0
-    file = open("input.txt").readlines()
     for line in file:
         split_by_semicolon = line.split(":")
         draws = split_by_semicolon[1].strip().split(";")
@@ -58,5 +57,5 @@ def part_two(file):
     return result
 
 file = open("input.txt").readlines()
-print("Sum of IDs of possible games: ", part_one())
-print("Sum of powers of the minimum sets of cubes in games: ", part_two())
+print("Sum of IDs of possible games: ", part_one(file))
+print("Sum of powers of the minimum sets of cubes in games: ", part_two(file))

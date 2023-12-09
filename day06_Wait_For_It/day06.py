@@ -1,8 +1,7 @@
 def parse_file():
     time, distance, ways_to_win = [], [], []
     with open("input.txt") as input_file:
-        i = 0
-        for line in input_file.readlines():
+        for i, line in enumerate(input_file.readlines()):
             temp = line.split(':')
             if i == 0:
                 for item in temp[1].strip().split():
@@ -10,7 +9,6 @@ def parse_file():
             elif i == 1:
                 for item in temp[1].strip().split():
                     distance.append(int(item))
-            i += 1
         i = 0
         while i < len(time):
             ways_to_win.append(0)
@@ -24,8 +22,7 @@ def fix_kerning(input):
     return [int(temp)]
 
 def part_one(time, distance, ways_to_win):
-    race_index = 0
-    for race_duration in time:
+    for race_index, race_duration in enumerate(time):
         hold_for = 0
         record_distance_for_race = distance[race_index]
         while hold_for < race_duration:
@@ -33,12 +30,9 @@ def part_one(time, distance, ways_to_win):
             distance_travelled = hold_for * (race_duration - hold_for)
             if distance_travelled > record_distance_for_race:
                 ways_to_win[race_index] += 1
-        race_index += 1
     result = ways_to_win[0]
-    i = 1
-    while i < len(ways_to_win):
+    for i in range(1, len(ways_to_win)):
         result = result * ways_to_win[i]
-        i += 1
     return result
 
 def part_two(time, distance):

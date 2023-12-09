@@ -1,6 +1,5 @@
 def generate_sequences(item):
     cur_seq = [int(x) for x in item]
-    all_zeros = False
     sequences = [cur_seq]
     while not all(x == 0 for x in cur_seq):
         new_seq = []

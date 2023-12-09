@@ -132,9 +132,7 @@ def compare(x, y):
         return rank_res
     
     # if still here than we proceed to 2nd level ranking (ignore jokers even if the flag is enabled)
-    i = -1
-    for char in x:
-        i += 1
+    for i, char in enumerate(x):
         if char == y[i]:
             continue
         chars_weight = weight_chars(char, y[i])
