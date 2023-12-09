@@ -1,7 +1,3 @@
-# TODO make the paths not relative cause they fail if run from the root
-import sys; sys.path.insert(0, "../utils")
-import utils
-
 valid_symbols = "!@#$%^&*()_-+={}[]/"
 part_numbers = {}
 
@@ -57,7 +53,8 @@ def get_number_going_left(char, engine_schematic, i, j):
 
 def build_array_from_file():
     engine_schematic = []
-    for line in utils.read_input():
+    file = open("input.txt").readlines()
+    for line in file:
         chars_array = []
         for char in line.strip():
             chars_array.append(char)

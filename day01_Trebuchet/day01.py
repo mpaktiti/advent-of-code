@@ -1,11 +1,9 @@
 import re
-import sys; sys.path.insert(0, "../utils")
-import utils
 
 # iterate over the items and calculate the sum for part 1
-def part_one():
+def part_one(file):
     result = 0
-    for line in utils.read_input():
+    for line in file:
         digits_found = []
         for char in line:
             if char in '0123456789':
@@ -17,9 +15,9 @@ def part_one():
     return result
 
 # iterate over the items and calculate the sum for part 2
-def part_two():
+def part_two(file):
     result = 0
-    for line in utils.read_input():
+    for line in file:
         # check if the line contains digit numbers
         char_index = 0
         digits_found = {}
@@ -48,5 +46,6 @@ def part_two():
             result += int(sorted_dict[first_item] + sorted_dict[first_item])
     return result
 
-print("Part 1 SUM: ", part_one())
-print("Part 2 SUM: ", part_two())
+file = open("input.txt").readlines()
+print("Part 1 SUM: ", part_one(file))
+print("Part 2 SUM: ", part_two(file))

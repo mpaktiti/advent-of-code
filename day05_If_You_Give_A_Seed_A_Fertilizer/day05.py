@@ -1,15 +1,11 @@
 import time
 
 almanac = []
-
-def read_input():
-    with open("input.txt") as input_file:
-        return input_file.readlines()
-
 # initialize almanac
 def initialize_almanac():
     temp_ranges = []
-    for line in read_input():
+    file = open("input.txt").readlines()
+    for line in file:
         if line.isspace():
             if len(temp_ranges) > 0:
                 almanac.append(temp_ranges)
